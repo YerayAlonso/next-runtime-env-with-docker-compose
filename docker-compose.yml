@@ -5,13 +5,10 @@ services:
     container_name: next-app
     build:
       context: ./next-app
-      dockerfile: dev.Dockerfile
+      dockerfile: Dockerfile
     environment:
       ENV_VARIABLE: ${ENV_VARIABLE}
       NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
-    volumes:
-      - ./next-app/src:/app/src
-      - ./next-app/public:/app/public
     restart: always
     ports:
       - 3000:3000

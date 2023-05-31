@@ -1,6 +1,6 @@
-# With Docker Compose
+# With Docker Compose and Next Runtime Environment
 
-This example contains everything needed to get a Next.js development and production environment up and running with Docker Compose.
+This example contains everything needed to get a Next.js production environment up and running with Docker Compose and [Next Runtime Environment](https://github.com/expatfile/next-runtime-env).
 
 ## Benefits of Docker Compose
 
@@ -10,59 +10,19 @@ This example contains everything needed to get a Next.js development and product
 - Multistage builds combined with [Output Standalone](https://nextjs.org/docs/advanced-features/output-file-tracing#automatically-copying-traced-files) outputs up to 85% smaller apps (Approximately 110 MB compared to 1 GB with create-next-app)
 - Easy configuration with YAML files
 
-## How to use
+## Benefits of Next Runtime Environment  
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-docker-compose with-docker-compose-app
-```
-
-```bash
-yarn create next-app --example with-docker-compose with-docker-compose-app
-```
-
-```bash
-pnpm create next-app --example with-docker-compose with-docker-compose-app
-```
-
-Optionally, after the installation is complete:
-
-- Run `cd next-app`, then run `npm install` or `yarn install` or `pnpm install` to generate a lockfile.
-
-It is recommended to commit a lockfile to version control. Although the example will work without one, build errors are more likely to occur when using the latest version of all dependencies. This way, we're always using a known good configuration to develop and run in production.
+Brings the [Build once, deploy many](https://www.mikemcgarr.com/blog/build-once-deploy-many.html) principle back to Next.js.
 
 ## Prerequisites
 
 Install [Docker Desktop](https://docs.docker.com/get-docker) for Mac, Windows, or Linux. Docker Desktop includes Docker Compose as part of the installation.
 
-## Development
-
-First, run the development server:
-
-```bash
-# Create a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
-docker network create my_network
-
-# Build dev
-# Note: Keep v1 command until "Use Docker Compose v2" is enabled by default for Docker Desktop for Linux
-# Docker aliases `docker-compose` (v1 command) to `docker compose` (v2 command), but not the other way around
-docker-compose -f docker-compose.dev.yml build
-
-# Up dev
-docker-compose -f docker-compose.dev.yml up
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-## Production
+## How to use
 
 Multistage builds are highly recommended in production. Combined with the Next [Output Standalone](https://nextjs.org/docs/advanced-features/output-file-tracing#automatically-copying-traced-files) feature, only `node_modules` files required for production are copied into the final Docker image.
 
-First, run the production server (Final image approximately 110 MB).
+First, build and run the production server (Final image approximately 110 MB).
 
 ```bash
 # Create a network, which allows containers to communicate
@@ -70,34 +30,34 @@ First, run the production server (Final image approximately 110 MB).
 docker network create my_network
 
 # Build prod
-docker-compose -f docker-compose.prod.yml build
+docker compose build
 
 # Up prod in detached mode
-docker-compose -f docker-compose.prod.yml up -d
+docker compose up -d
 ```
 
-Alternatively, run the production server without without multistage builds (Final image approximately 1 GB).
+Open [http://localhost:3000](http://localhost:3000) and check the page is showing the correct value for `NEXT_PUBLIC_ENV_VARIABLE`.
+
+Kill the containers:
 
 ```bash
-# Create a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
-docker network create my_network
-
-# Build prod without multistage
-docker-compose -f docker-compose.prod-without-multistage.yml build
-
-# Up prod without multistage in detached mode
-docker-compose -f docker-compose.prod-without-multistage.yml up -d
+docker kill $(docker ps -aq) && docker rm $(docker ps -aq)
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Modify the value of the `NEXT_PUBLIC_ENV_VARIABLE` variable in the `.env` file.
+
+Run the production server again, without rebuilding it:
+
+```bash
+# Up prod in detached mode
+docker compose up -d
+```
+
+Open [http://localhost:3000](http://localhost:3000) and check the page is showing the updated value for `NEXT_PUBLIC_ENV_VARIABLE`.
 
 ## Useful commands
 
 ```bash
-# Stop all running containers
-docker kill $(docker ps -aq) && docker rm $(docker ps -aq)
-
 # Free space
 docker system prune -af --volumes
 ```
