@@ -7,7 +7,6 @@ This example contains everything needed to get a Next.js production environment 
 - Develop locally without Node.js or TypeScript installed ✨
 - Easy to run, consistent development environment across macOS, Windows, and Linux teams
 - Run multiple Next.js apps, databases, and other microservices in a single deployment
-- Multistage builds combined with [Output Standalone](https://nextjs.org/docs/advanced-features/output-file-tracing#automatically-copying-traced-files) outputs up to 85% smaller apps (Approximately 110 MB compared to 1 GB with create-next-app)
 - Easy configuration with YAML files
 
 ## Benefits of Next Runtime Environment  
@@ -19,8 +18,6 @@ Brings the [Build once, deploy many](https://www.mikemcgarr.com/blog/build-once-
 Install [Docker Desktop](https://docs.docker.com/get-docker) for Mac, Windows, or Linux. Docker Desktop includes Docker Compose as part of the installation.
 
 ## How to use
-
-Multistage builds are highly recommended in production. Combined with the Next [Output Standalone](https://nextjs.org/docs/advanced-features/output-file-tracing#automatically-copying-traced-files) feature, only `node_modules` files required for production are copied into the final Docker image.
 
 First, build and run the production server (Final image approximately 110 MB).
 
